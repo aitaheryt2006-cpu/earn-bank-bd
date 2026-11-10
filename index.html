@@ -1,1 +1,297 @@
 
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EARN BANK BD</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#07130f;color:#fff;min-height:100vh}
+header{background:#10271e;padding:18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #24523c}
+.logo{font-size:21px;font-weight:bold;color:#35e69b}
+button{border:0;padding:12px 17px;border-radius:9px;background:#18b879;color:#06160e;font-weight:bold;cursor:pointer}
+input{width:100%;padding:14px;margin:8px 0;background:#10271e;border:1px solid #315a46;border-radius:9px;color:white;outline:none}
+input:focus{border-color:#35e69b}
+.container{max-width:500px;margin:30px auto;padding:16px}
+.card{background:#10271e;border:1px solid #24523c;border-radius:15px;padding:20px;margin-bottom:15px}
+h2{margin-bottom:15px;color:#35e69b}
+h3{margin-bottom:10px}
+p{color:#b8cfc2;line-height:1.7}
+.tabs{display:flex;gap:10px;margin-bottom:18px}
+.tabs button{flex:1}
+.secondary{background:#254537;color:white}
+.hidden{display:none!important}
+.message{padding:12px;border-radius:8px;margin:12px 0;background:#193b2b;color:#8fffc0;line-height:1.5}
+.error{background:#482222;color:#ffaaaa}
+.profile-row{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #294737}
+.profile-row span:first-child{color:#a9c7b5}
+.balance{font-size:30px;font-weight:bold;color:#35e69b;margin:12px 0}
+nav{position:fixed;bottom:0;left:0;right:0;background:#10271e;border-top:1px solid #315a46;display:flex;justify-content:space-around;padding:12px 3px}
+nav button{background:transparent;color:#c5e8d5;padding:8px 5px;font-size:12px}
+main{padding-bottom:85px}
+.small{font-size:12px;color:#9bb8a8}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">EARN BANK BD</div>
+ <button id="logoutBtn" class="hidden">Logout</button>
+</header>
+
+<main class="container">
+
+<section id="authSection">
+ <div class="card">
+  <h2>Welcome to EARN BANK BD</h2>
+  <p>আপনার অ্যাকাউন্টে প্রবেশ করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।</p>
+ </div>
+
+ <div class="tabs">
+  <button id="loginTab">Login</button>
+  <button id="signupTab" class="secondary">Register</button>
+ </div>
+
+ <div class="card" id="loginForm">
+  <h2>Login</h2>
+  <input id="loginEmail" type="email" placeholder="Email Address">
+  <input id="loginPassword" type="password" placeholder="Password">
+  <button id="loginBtn" style="width:100%">Login Now</button>
+ </div>
+
+ <div class="card hidden" id="signupForm">
+  <h2>Create Account</h2>
+  <input id="fullName" placeholder="Full Name">
+  <input id="username" placeholder="Username">
+  <input id="signupEmail" type="email" placeholder="Email Address">
+  <input id="signupPassword" type="password" placeholder="Password (minimum 6 characters)">
+  <input id="referralCode" placeholder="Referral Code (Optional)">
+  <button id="signupBtn" style="width:100%">Create Account</button>
+ </div>
+
+ <div id="authMessage"></div>
+</section>
+
+<section id="dashboard" class="hidden">
+ <div class="card">
+  <h2 id="welcome">Welcome</h2>
+  <p>আপনার EARN BANK BD Dashboard</p>
+  <div class="balance">৳<span id="balance">0.00</span></div>
+  <p>Available Balance</p>
+ </div>
+
+ <div class="card">
+  <h3>Account Information</h3>
+  <div class="profile-row"><span>Full Name</span><b id="profileName">—</b></div>
+  <div class="profile-row"><span>Username</span><b id="profileUsername">—</b></div>
+  <div class="profile-row"><span>Email</span><b id="profileEmail">—</b></div>
+  <div class="profile-row"><span>Referral Code</span><b id="profileReferral">—</b></div>
+  <div class="profile-row"><span>Membership</span><b id="membership">—</b></div>
+  <div class="profile-row"><span>Account Status</span><b id="accountStatus">—</b></div>
+  <div class="profile-row"><span>Joining Date</span><b id="joiningDate">—</b></div>
+ </div>
+
+ <div class="card">
+  <h3>Account Activation</h3>
+  <p id="activationInfo">আপনার অ্যাকাউন্টের বর্তমান অবস্থা এখানে দেখানো হবে।</p>
+  <p class="small">Activation payment যাচাই না হওয়া পর্যন্ত অ্যাকাউন্ট সক্রিয় হবে না।</p>
+ </div>
+
+ <div class="card">
+  <h3>Referral</h3>
+  <p>আপনার Referral Code:</p>
+  <h2 id="referralDisplay">—</h2>
+  <button id="copyReferral">Copy Referral Code</button>
+ </div>
+ <div id="dashboardMessage"></div>
+</section>
+
+</main>
+
+<nav id="bottomNav" class="hidden">
+ <button onclick="showNotice('Support')">Support</button>
+ <button onclick="showNotice('Team')">Team</button>
+ <button onclick="showNotice('Home')">Home</button>
+ <button onclick="showNotice('Withdraw')">Withdraw</button>
+ <button onclick="showNotice('Profile')">Profile</button>
+</nav>
+
+<script>
+const SUPABASE_URL = 'https://jruutdsxqjlkthfydaro.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_3Ziwu3-irk181OIz75UQtA_FR8_qTqi';
+
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const $ = id => document.getElementById(id);
+
+function message(id, text, error=false) {
+  $(id).textContent = text;
+  $(id).className = 'message' + (error ? ' error' : '');
+}
+
+function showLogin() {
+  $('loginForm').classList.remove('hidden');
+  $('signupForm').classList.add('hidden');
+  $('loginTab').classList.remove('secondary');
+  $('signupTab').classList.add('secondary');
+  $('authMessage').textContent = '';
+}
+
+function showSignup() {
+  $('signupForm').classList.remove('hidden');
+  $('loginForm').classList.add('hidden');
+  $('signupTab').classList.remove('secondary');
+  $('loginTab').classList.add('secondary');
+  $('authMessage').textContent = '';
+}
+
+$('loginTab').onclick = showLogin;
+$('signupTab').onclick = showSignup;
+
+$('signupBtn').onclick = async () => {
+  const full_name = $('fullName').value.trim();
+  const username = $('username').value.trim();
+  const email = $('signupEmail').value.trim();
+  const password = $('signupPassword').value;
+  const referral_code = $('referralCode').value.trim();
+
+  if (!full_name || !username || !email || !password) {
+    return message('authMessage','সব প্রয়োজনীয় তথ্য পূরণ করুন।',true);
+  }
+
+  if (password.length < 6) {
+    return message('authMessage','Password কমপক্ষে ৬ অক্ষরের হতে হবে।',true);
+  }
+
+  $('signupBtn').disabled = true;
+  $('signupBtn').textContent = 'Creating Account...';
+
+  try {
+    const {data,error} = await db.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {full_name,username,referral_code}
+      }
+    });
+
+    if (error) throw error;
+
+    if (data.session) {
+      await loadDashboard(data.user);
+    } else {
+      message('authMessage','Registration সফল হয়েছে। Email confirmation চালু থাকলে আপনার ইমেইল যাচাই করে Login করুন।');
+    }
+  } catch(e) {
+    message('authMessage',e.message,true);
+  } finally {
+    $('signupBtn').disabled = false;
+    $('signupBtn').textContent = 'Create Account';
+  }
+};
+
+$('loginBtn').onclick = async () => {
+  const email = $('loginEmail').value.trim();
+  const password = $('loginPassword').value;
+
+  if (!email || !password) {
+    return message('authMessage','Email এবং Password লিখুন।',true);
+  }
+
+  $('loginBtn').disabled = true;
+  $('loginBtn').textContent = 'Signing in...';
+
+  try {
+    const {data,error} = await db.auth.signInWithPassword({email,password});
+    if (error) throw error;
+    await loadDashboard(data.user);
+  } catch(e) {
+    message('authMessage',e.message,true);
+  } finally {
+    $('loginBtn').disabled = false;
+    $('loginBtn').textContent = 'Login Now';
+  }
+};
+
+async function loadDashboard(user) {
+  try {
+    const {data:profile,error} = await db
+      .from('profiles')
+      .select('full_name,username,email,referral_code,balance,membership_status,membership_type,created_at')
+      .eq('id',user.id)
+      .single();
+
+    if (error) throw error;
+    if (!profile) throw new Error('Profile পাওয়া যায়নি।');
+
+    $('authSection').classList.add('hidden');
+    $('dashboard').classList.remove('hidden');
+    $('bottomNav').classList.remove('hidden');
+    $('logoutBtn').classList.remove('hidden');
+
+    $('welcome').textContent = 'Welcome, ' + (profile.full_name || profile.username || 'User');
+    $('balance').textContent = Number(profile.balance || 0).toFixed(2);
+    $('profileName').textContent = profile.full_name || '—';
+    $('profileUsername').textContent = profile.username || '—';
+    $('profileEmail').textContent = profile.email || user.email || '—';
+    $('profileReferral').textContent = profile.referral_code || '—';
+    $('referralDisplay').textContent = profile.referral_code || '—';
+    $('membership').textContent = profile.membership_type || 'Free';
+    $('accountStatus').textContent = profile.membership_status || 'Inactive';
+
+    $('joiningDate').textContent = profile.created_at
+      ? new Date(profile.created_at).toLocaleDateString('en-GB')
+      : '—';
+
+    $('activationInfo').textContent =
+      profile.membership_status === 'active'
+      ? 'আপনার অ্যাকাউন্ট সক্রিয়।'
+      : 'আপনার অ্যাকাউন্ট এখনো সক্রিয় হয়নি।';
+
+    $('dashboardMessage').textContent = '';
+  } catch(e) {
+    message('authMessage','Dashboard লোড করা যায়নি: ' + e.message,true);
+  }
+}
+
+$('copyReferral').onclick = async () => {
+  const code = $('referralDisplay').textContent;
+  if (!code || code === '—') return;
+  try {
+    await navigator.clipboard.writeText(code);
+    message('dashboardMessage','Referral Code কপি হয়েছে।');
+  } catch(e) {
+    message('dashboardMessage','কপি করা যায়নি। Code নির্বাচন করে কপি করুন।',true);
+  }
+};
+
+$('logoutBtn').onclick = async () => {
+  const {error} = await db.auth.signOut();
+  if (error) return alert(error.message);
+  location.reload();
+};
+
+function showNotice(page) {
+  if (page === 'Home') {
+    $('dashboard').scrollIntoView({behavior:'smooth'});
+  } else {
+    message('dashboardMessage',page + ' পেজ পরবর্তী ধাপে চালু করা হবে।');
+  }
+}
+
+db.auth.onAuthStateChange((event,session) => {
+  if (event === 'SIGNED_IN' && session?.user) {
+    loadDashboard(session.user);
+  }
+});
+
+(async () => {
+  const {data:{session}} = await db.auth.getSession();
+  if (session?.user) await loadDashboard(session.user);
+})();
+</script>
+</body>
+  </html>
+  
