@@ -219,8 +219,7 @@ async function loadDashboard(user) {
   try {
     const {data:profile,error} = await db
       .from('profiles')
-      .select('full_name,username,email,referral_code,balance,membership_status,membership_type,created_at')
-      .eq('id',user.id)
+.select('full_name,username,referral_code,balance,membership_status,membership_type,created_at')     .eq('id',user.id)
       .single();
 
     if (error) throw error;
