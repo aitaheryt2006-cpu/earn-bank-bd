@@ -72,6 +72,10 @@ main{padding-bottom:85px}
  </div>
 
  <div id="authMessage"></div>
+
+ <button id="resendEmailBtn" class="hidden" style="width:100%;margin-top:10px">
+Resend Confirmation Email
+ </button>
 </section>
 
 <section id="dashboard" class="hidden">
@@ -184,6 +188,7 @@ $('signupBtn').onclick = async () => {
       await loadDashboard(data.user);
     } else {
       message('authMessage','Registration সফল হয়েছে। Email confirmation চালু থাকলে আপনার ইমেইল যাচাই করে Login করুন।');
+     $('resendEmailBtn').classList.remove('hidden');
     }
   } catch(e) {
     message('authMessage',e.message,true);
@@ -192,6 +197,29 @@ $('signupBtn').onclick = async () => {
     $('signupBtn').textContent = 'Create Account';
   }
 };
+ 
+$('resendEmailBtn').onclick = async () => {
+  const email = $('signupEmail').value.trim();
+
+  if (!email) {
+    return message('authMessage','আপনার Registration Email লিখুন।',true);
+  }
+
+  const { error } = await db.auth.resend({
+    type: 'signup',
+    email,
+    options: {
+      emailRedirectTo: 'https://aitaheryt2006-cpu.github.io/earn-bank-bd/'
+    }
+  });
+
+  if (error) {
+    message('authMessage',error.message,true);
+  } else {
+    message('authMessage','নতুন Confirmation Email পাঠানো হয়েছে।');
+  }
+};
+ 
 
 $('loginBtn').onclick = async () => {
   const email = $('loginEmail').value.trim();
