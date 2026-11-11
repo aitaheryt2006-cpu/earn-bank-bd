@@ -311,6 +311,53 @@ async function loadDashboard(user) {
     message('authMessage','Dashboard লোড করা যায়নি: ' + e.message,true);
   }
 }
+ $('activationSubmit').onclick = async () => {
+  const method = $('activationMethod').value.trim();
+  const trx = $('activationTrx').value.trim();
+
+  if (!method || !trx) {
+    return message('activationMessage',
+      'Payment Method এবং Transaction ID লিখুন।', true);
+  }
+
+  if (!['bkash','nagad','rocket'].includes(method.toLowerCase())) {
+    return message('activationMessage',
+      'bKash, Nagad অথবা Rocket ব্যবহার করুন।', true);
+  }
+
+  const { data: { user } } = await db.auth.getUser();
+
+  if (!user) {
+    return message('activationMessage',
+      'আবার Login করুন।', true);
+  }
+
+  $('activationSubmit').disabled = true;
+
+  try {
+    const { error } = await db
+      .from('activation_payments')
+      .insert({
+        user_id: user.id,
+        amount: 30,
+        payment_method: method,
+        transaction_reference: trx,
+        status: 'pending'
+      });
+
+    if (error) throw error;
+
+    message('activationMessage',
+      'আপনার Activation Payment Request জমা হয়েছে। Admin যাচাই করবেন।');
+
+    $('activationForm').classList.add('hidden');
+
+  } catch (e) {
+    message('activationMessage', e.message, true);
+  } finally {
+    $('activationSubmit').disabled = false;
+  }
+};
 
 $('copyReferral').onclick = async () => {
   const code = $('referralDisplay').textContent;
