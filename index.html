@@ -597,6 +597,76 @@ $('loadMyJobsBtn').onclick = loadMyJobs;
   $('newTaskReward').value = '';
   $('newTaskUrl').value = '';
 };
+ $('loadPendingTasksBtn').onclick = loadPendingTasks;
+
+async function loadPendingTasks() {
+  const list = $('pendingTasksList');
+  list.textContent = 'জমা দেওয়া কাজ লোড হচ্ছে...';
+
+  const { data, error } = await db.rpc('get_pending_tasks');
+
+  if (error) {
+    list.textContent = error.message;
+    return;
+  }
+
+  list.innerHTML = '';
+
+  if (!data || !data.length) {
+    list.textContent = 'কোনো Pending কাজ নেই।';
+    return;
+  }
+
+  data.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const title = document.createElement('h3');
+    title.textContent = item.title;
+
+    const user = document.createElement('p');
+    user.textContent =
+      'সদস্য: ' + (item.full_name || item.username || item.user_id);
+
+    const reward = document.createElement('p');
+    reward.textContent = 'রিওয়ার্ড: ৳' + item.reward;
+
+    const approve = document.createElement('button');
+    approve.textContent = 'Approve';
+
+    const reject = document.createElement('button');
+    reject.textContent = 'Reject';
+
+    async function review(decision) {
+      approve.disabled = true;
+      reject.disabled = true;
+
+      const { error } = await db.rpc('review_task', {
+        p_completion_id: item.id,
+        p_decision: decision
+      });
+
+      if (error) {
+        alert(error.message);
+        approve.disabled = false;
+        reject.disabled = false;
+        return;
+      }
+
+      alert(decision === 'approved'
+        ? 'কাজ Approve হয়েছে। রিওয়ার্ড যোগ হয়েছে।'
+        : 'কাজ Reject হয়েছে।');
+
+      loadPendingTasks();
+    }
+
+    approve.onclick = () => review('approved');
+    reject.onclick = () => review('rejected');
+
+    card.append(title, user, reward, approve, reject);
+    list.appendChild(card);
+  });
+}
 $('copyReferral').onclick = async () => {
   const code = $('referralDisplay').textContent;
   if (!code || code === '—') return;
