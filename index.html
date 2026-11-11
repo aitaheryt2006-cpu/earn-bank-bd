@@ -303,6 +303,7 @@ async function loadDashboard(user) {
 
     $('authSection').classList.add('hidden');
     $('dashboard').classList.remove('hidden');
+   checkOwnerAdmin(user);
     $('bottomNav').classList.remove('hidden');
     $('logoutBtn').classList.remove('hidden');
 
