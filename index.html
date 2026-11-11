@@ -143,7 +143,7 @@ Resend Confirmation Email
  <!-- MY JOB PANEL -->
 <div class="card" id="myJobPanel">
   <h3>📋 My Job</h3>
-  <p>আপনার জন্য उपलब्ध কাজগুলো এখানে দেখতে পারবেন।</p>
+  <p>আপনার জন্য উল্লেখ গুলো এখানে দেখতে পারবেন।</p>
   <button id="loadMyJobsBtn" class="btn">
     কাজ দেখুন
   </button>
@@ -158,6 +158,21 @@ Resend Confirmation Email
   </button>
 
   <div id="activationRequests" style="margin-top:15px"></div>
+  <hr>
+<h3>🛠️ Task Management</h3>
+
+<input id="newTaskTitle" placeholder="কাজের নাম">
+<textarea id="newTaskDescription" placeholder="কাজের বিবরণ"></textarea>
+
+<input id="newTaskCategory" placeholder="কাজের ক্যাটাগরি">
+<input id="newTaskReward" type="number" placeholder="রিওয়ার্ড (৳)">
+<input id="newTaskUrl" type="url" placeholder="কাজের লিংক">
+
+<button id="createTaskBtn">কাজ তৈরি করুন</button>
+
+<h3>📥 Pending Submissions</h3>
+<button id="loadPendingTasksBtn">জমা দেওয়া কাজ দেখুন</button>
+<div id="pendingTasksList"></div>
  </div>
  <div id="dashboardMessage"></div>
 </section>
