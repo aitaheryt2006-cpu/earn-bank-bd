@@ -162,6 +162,55 @@ main{padding-bottom:85px}
 #bottomNav .nav-home span{
   font-size:29px;
 }
+ .balance-card{
+  background:linear-gradient(135deg,#06452e,#087b50,#12a66b);
+  color:#ffffff;
+  border:1px solid #c5a64b;
+  border-radius:20px;
+  padding:22px 18px;
+  margin:15px 0;
+  box-shadow:0 8px 25px #063d2b55;
+}
+
+.balance-top,
+.balance-bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+
+.balance-top{
+  color:#ffe39a;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.balance-card h2{
+  color:#ffffff;
+  margin:22px 0 5px;
+}
+
+.balance-card p{
+  color:#d6f5e5;
+  font-size:13px;
+}
+
+.balance-amount{
+  color:#ffdf83;
+  font-size:36px;
+  font-weight:900;
+  margin:12px 0 20px;
+  overflow-wrap:anywhere;
+}
+
+.balance-bottom{
+  border-top:1px solid #ffffff35;
+  padding-top:13px;
+  color:#e2f8e9;
+  font-size:10px;
+  font-weight:bold;
+ }
 </style>
 </head>
 <body>
@@ -247,12 +296,24 @@ Resend Confirmation Email
 <div class="notice-strip">
   <span>📢 EARN BANK BD — নতুন কাজ ও আপডেট পেতে Dashboard নিয়মিত দেখুন</span>
 </div>
- <div class="card">
+<div class="balance-card">
+  <div class="balance-top">
+    <span>💰 My Wallet</span>
+    <span>✦ EARN BANK BD</span>
+  </div>
+
   <h2 id="welcome">Welcome</h2>
-  <p>আপনার EARN BANK BD Dashboard</p>
-  <div class="balance">৳<span id="balance">0.00</span></div>
-  <p>Available Balance</p>
- </div>
+  <p>আপনার মোট উপলব্ধ ব্যালেন্স</p>
+
+  <div class="balance-amount">
+    ৳<span id="balance">0.00</span>
+  </div>
+
+  <div class="balance-bottom">
+    <span>AVAILABLE BALANCE</span>
+    <span>✓ Verified Wallet</span>
+  </div>
+</div>
 
  <div class="card">
   <h3>Account Information</h3>
