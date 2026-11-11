@@ -97,11 +97,33 @@ Resend Confirmation Email
   <div class="profile-row"><span>Joining Date</span><b id="joiningDate">—</b></div>
  </div>
 
- <div class="card">
+<div class="card" id="activationCard">
   <h3>Account Activation</h3>
-  <p id="activationInfo">আপনার অ্যাকাউন্টের বর্তমান অবস্থা এখানে দেখানো হবে।</p>
-  <p class="small">Activation payment যাচাই না হওয়া পর্যন্ত অ্যাকাউন্ট সক্রিয় হবে না।</p>
- </div>
+
+  <p id="activationInfo">
+    আপনার অ্যাকাউন্ট সক্রিয় করতে ৳৩০ Activation Fee জমা দিন।
+  </p>
+
+  <div id="activationForm">
+    <p>Activation Fee: <b>৳30</b></p>
+
+    <input id="activationMethod"
+      placeholder="Payment Method (bKash/Nagad/Rocket)">
+
+    <input id="activationTrx"
+      placeholder="Transaction ID">
+
+    <button id="activationSubmit" style="width:100%">
+      Submit Activation Payment
+    </button>
+  </div>
+
+  <p class="small">
+    পেমেন্ট যাচাই করার পর Owner Admin আপনার অ্যাকাউন্ট Active করবেন।
+  </p>
+
+  <div id="activationMessage"></div>
+</div>
 
  <div class="card">
   <h3>Referral</h3>
