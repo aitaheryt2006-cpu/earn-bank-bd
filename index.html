@@ -484,6 +484,86 @@ async function reviewActivation(paymentId, decision) {
   alert('Payment ' + decision + ' হয়েছে।');
   $('loadActivationRequests').click();
  }
+ async function loadMyJobs() {
+  const list = $('myJobsList');
+  list.textContent = 'কাজ লোড হচ্ছে...';
+
+  const { data: profile } = await db
+    .from('profiles')
+    .select('membership_status')
+    .eq('id', (await db.auth.getUser()).data.user.id)
+    .single();
+
+  if (profile?.membership_status !== 'active') {
+    list.textContent = 'কাজ দেখতে হলে আগে Account Activate করুন।';
+    return;
+  }
+
+  const { data, error } = await db
+    .from('tasks')
+    .select('id,title,description,category,reward,target_url')
+    .eq('is_active', true)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    list.textContent = error.message;
+    return;
+  }
+
+  list.innerHTML = '';
+
+  if (!data || !data.length) {
+    list.textContent = 'এখন কোনো কাজ নেই।';
+    return;
+  }
+
+  data.forEach(task => {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const title = document.createElement('h3');
+    title.textContent = task.title;
+
+    const desc = document.createElement('p');
+    desc.textContent = task.description || '';
+
+    const reward = document.createElement('p');
+    reward.textContent = 'রিওয়ার্ড: ৳' + task.reward;
+
+    const link = document.createElement('a');
+    link.href = task.target_url;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.textContent = 'কাজটি খুলুন';
+
+    const submit = document.createElement('button');
+    submit.textContent = 'কাজ জমা দিন';
+
+    submit.onclick = async () => {
+      submit.disabled = true;
+
+      const { data, error } = await db.rpc('submit_task', {
+        p_task_id: task.id
+      });
+
+      submit.disabled = false;
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      alert(data.message || 'কাজ জমা হয়েছে। Owner যাচাই করবেন।');
+      submit.textContent = 'জমা হয়েছে';
+      submit.disabled = true;
+    };
+
+    card.append(title, desc, reward, link, submit);
+    list.appendChild(card);
+  });
+}
+
+$('loadMyJobsBtn').onclick = loadMyJobs;
 $('copyReferral').onclick = async () => {
   const code = $('referralDisplay').textContent;
   if (!code || code === '—') return;
