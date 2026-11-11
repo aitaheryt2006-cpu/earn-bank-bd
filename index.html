@@ -234,7 +234,13 @@ $('loginBtn').onclick = async () => {
 
   try {
     const {data,error} = await db.auth.signInWithPassword({email,password});
-    if (error) throw error;
+    if (error) {
+  message('authMessage',
+    `${error.message} | Code: ${error.code || '-'} | Status: ${error.status || '-'} | Details: ${error.details || '-'} | Hint: ${error.hint || '-'}`,
+    true
+  );
+  return;
+    }
     await loadDashboard(data.user);
   } catch(e) {
     message('authMessage',e.message,true);
