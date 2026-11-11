@@ -32,15 +32,89 @@ nav{position:fixed;bottom:0;left:0;right:0;background:#10271e;border-top:1px sol
 nav button{background:transparent;color:#c5e8d5;padding:8px 5px;font-size:12px}
 main{padding-bottom:85px}
 .small{font-size:12px;color:#9bb8a8}
+ .hero-banner{
+  padding:24px 20px;
+  border-radius:18px;
+  margin-bottom:14px;
+  background:linear-gradient(120deg,#087b50,#19bd78,#65e6aa);
+  color:#062417;
+}
+.hero-banner h2{color:#062417;font-size:24px}
+.hero-banner p{color:#073c28;font-weight:bold}
+
+.support-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:12px;
+}
+.support-btn{
+  background:#f2fff8;
+  color:#123d2a;
+  border:1px solid #9de8c2;
+}
+
+.notice-strip{
+  overflow:hidden;
+  white-space:nowrap;
+  background:#eafff3;
+  color:#15583a;
+  border-radius:10px;
+  padding:10px;
+  margin-bottom:16px;
+  font-weight:bold;
+}
+
+.quick-title{
+  color:#24b875;
+  font-size:15px;
+  font-weight:800;
+  margin:20px 0 12px;
+}
+
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.quick-card{
+  min-height:104px;
+  background:#f7fff9;
+  color:#102b1d;
+  border:1px solid #cceedd;
+  border-radius:15px;
+  padding:13px 5px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+.quick-icon{
+  font-size:25px;
+  background:#e4f8ec;
+  padding:8px;
+  border-radius:12px;
+      }
 </style>
 </head>
 <body>
 
 <header>
  <div class="logo">EARN BANK BD</div>
- <button id="logoutBtn" class="hidden">Logout</button>
-</header>
 
+ <div style="display:flex;gap:8px;align-items:center">
+  <button onclick="showNotice('Notifications')"
+   style="border-radius:50%;padding:12px">🔔</button>
+
+  <button onclick="toggleHeaderMenu()"
+   style="border-radius:50%;padding:12px">☰</button>
+
+  <button id="logoutBtn" class="hidden">Logout</button>
+ </div>
+</header>
 <main class="container">
 
 <section id="authSection">
@@ -79,6 +153,36 @@ Resend Confirmation Email
 </section>
 
 <section id="dashboard" class="hidden">
+ <!-- HEADER MENU -->
+<div id="headerMenu" class="header-menu hidden">
+  <button onclick="openQuick('My Job')">📋 My Job</button>
+  <button onclick="showNotice('My Team')">👥 My Team</button>
+  <button onclick="showNotice('Withdraw')">💳 Withdraw</button>
+  <button onclick="showNotice('Profile')">👤 Profile</button>
+</div>
+ <!-- DASHBOARD BANNER -->
+<div class="hero-banner">
+  <h2>স্বাগতম EARN BANK BD</h2>
+  <p>প্রতিদিনের কাজ, রিওয়ার্ড ও অ্যাকাউন্ট পরিচালনা করুন।</p>
+</div>
+
+<!-- SUPPORT BUTTONS -->
+<div class="support-grid">
+  <button class="support-btn"
+    onclick="showNotice('Telegram Support')">
+    ✈️ Telegram Support
+  </button>
+
+  <button class="support-btn"
+    onclick="showNotice('Official Support')">
+    ☎️ Official Support
+  </button>
+</div>
+
+<!-- NOTICE -->
+<div class="notice-strip">
+  <span>📢 EARN BANK BD — নতুন কাজ ও আপডেট পেতে Dashboard নিয়মিত দেখুন</span>
+</div>
  <div class="card">
   <h2 id="welcome">Welcome</h2>
   <p>আপনার EARN BANK BD Dashboard</p>
@@ -133,7 +237,72 @@ Resend Confirmation Email
 
   <div id="activationMessage"></div>
 </div>
+<!-- QUICK ACCESS -->
+<div class="quick-title">QUICK ACCESS</div>
 
+<div class="quick-grid">
+
+<button class="quick-card" onclick="openQuick('My Job')">
+<span class="quick-icon">📋</span>
+<b>My Job</b>
+</button>
+
+<button class="quick-card" onclick="showNotice('Pro Job')">
+<span class="quick-icon">⭐</span>
+<b>Pro Job</b>
+</button>
+
+<button class="quick-card" onclick="showNotice('Withdraw')">
+<span class="quick-icon">💳</span>
+<b>Withdraw</b>
+</button>
+
+<button class="quick-card" onclick="showNotice('Add Funds')">
+<span class="quick-icon">➕</span>
+<b>Add Funds</b>
+</button>
+
+<button class="quick-card" onclick="showNotice('My Team')">
+<span class="quick-icon">👥</span>
+<b>My Team</b>
+</button>
+
+<button class="quick-card" onclick="showNotice('Promo Code')">
+<span class="quick-icon">🎁</span>
+<b>Promo Code</b>
+</button>
+
+<button class="quick-card" onclick="showNotice('Monthly Pay')">
+<span class="quick-icon">📅</span>
+<b>Monthly Pay</b>
+</button>
+
+<button class="quick-card" onclick="showNotice('Math Job')">
+<span class="quick-icon">🧮</span>
+<b>Math Job</b>
+</button>
+
+<button class="quick-card" onclick="showNotice('Quiz Job')">
+<span class="quick-icon">❓</span>
+<b>Quiz Job</b>
+</button>
+
+<button class="quick-card" onclick="showNotice('Slot Buy')">
+<span class="quick-icon">🎯</span>
+<b>Slot Buy</b>
+</button>
+
+<button class="quick-card" onclick="showNotice('Top Refer')">
+<span class="quick-icon">🏆</span>
+<b>Top Refer</b>
+</button>
+
+<button class="quick-card" onclick="showNotice('More')">
+<span class="quick-icon">⋮</span>
+<b>More</b>
+</button>
+
+</div>
  <div class="card">
   <h3>Referral</h3>
   <p>আপনার Referral Code:</p>
@@ -683,7 +852,22 @@ $('logoutBtn').onclick = async () => {
   if (error) return alert(error.message);
   location.reload();
 };
+function toggleHeaderMenu() {
+  const menu = document.getElementById('headerMenu');
 
+  if (menu) {
+    menu.classList.toggle('hidden');
+  }
+}
+
+function openQuick(page) {
+  if (page === 'My Job') {
+    document.getElementById('myJobPanel')
+      .scrollIntoView({behavior:'smooth'});
+
+    loadMyJobs();
+  }
+}
 function showNotice(page) {
   if (page === 'Home') {
     $('dashboard').scrollIntoView({behavior:'smooth'});
