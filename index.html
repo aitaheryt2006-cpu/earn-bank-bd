@@ -564,6 +564,39 @@ async function reviewActivation(paymentId, decision) {
 }
 
 $('loadMyJobsBtn').onclick = loadMyJobs;
+ $('createTaskBtn').onclick = async () => {
+  const title = $('newTaskTitle').value.trim();
+  const description = $('newTaskDescription').value.trim();
+  const category = $('newTaskCategory').value.trim();
+  const reward = Number($('newTaskReward').value);
+  const target_url = $('newTaskUrl').value.trim();
+
+  if (!title || !category || !reward || !target_url) {
+    alert('সব তথ্য পূরণ করুন।');
+    return;
+  }
+
+  const { data, error } = await db.rpc('create_task', {
+    p_title: title,
+    p_description: description,
+    p_category: category,
+    p_reward: reward,
+    p_target_url: target_url
+  });
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  alert('নতুন কাজ সফলভাবে তৈরি হয়েছে!');
+
+  $('newTaskTitle').value = '';
+  $('newTaskDescription').value = '';
+  $('newTaskCategory').value = '';
+  $('newTaskReward').value = '';
+  $('newTaskUrl').value = '';
+};
 $('copyReferral').onclick = async () => {
   const code = $('referralDisplay').textContent;
   if (!code || code === '—') return;
