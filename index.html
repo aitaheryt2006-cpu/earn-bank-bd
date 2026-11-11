@@ -377,7 +377,88 @@ async function loadDashboard(user) {
     $('activationSubmit').disabled = false;
   }
 };
+async function checkOwnerAdmin(user) {
+  const { data, error } = await db
+    .from('owner_admins')
+    .select('user_id')
+    .eq('user_id', user.id)
+    .maybeSingle();
 
+  if (error) {
+    console.error('Owner check:', error.message);
+    return;
+  }
+
+  if (data) {
+    $('ownerAdminPanel').classList.remove('hidden');
+  }
+}
+
+$('loadActivationRequests').onclick = async () => {
+  const box = $('activationRequests');
+  box.textContent = 'Loading...';
+
+  const { data, error } = await db
+    .from('activation_payments')
+    .select('id,user_id,amount,payment_method,transaction_reference,status,created_at')
+    .eq('status', 'pending')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    box.textContent = error.message;
+    return;
+  }
+
+  if (!data.length) {
+    box.textContent = 'কোনো Pending Payment নেই।';
+    return;
+  }
+
+  box.innerHTML = '';
+
+  data.forEach(payment => {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const title = document.createElement('h3');
+    title.textContent = '৳' + payment.amount + ' Activation';
+
+    const details = document.createElement('p');
+    details.textContent =
+      'User ID: ' + payment.user_id +
+      ' | Method: ' + payment.payment_method +
+      ' | TrxID: ' + payment.transaction_reference;
+
+    const approve = document.createElement('button');
+    approve.textContent = 'Approve';
+    approve.onclick = () => reviewActivation(payment.id, 'approved');
+
+    const reject = document.createElement('button');
+    reject.textContent = 'Reject';
+    reject.className = 'secondary';
+    reject.style.marginLeft = '8px';
+    reject.onclick = () => reviewActivation(payment.id, 'rejected');
+
+    card.append(title, details, approve, reject);
+    box.appendChild(card);
+  });
+};
+
+async function reviewActivation(paymentId, decision) {
+  if (!confirm('আপনি কি এই Payment ' + decision + ' করতে চান?')) return;
+
+  const { data, error } = await db.rpc('review_activation', {
+    p_payment_id: paymentId,
+    p_decision: decision
+  });
+
+  if (error) {
+    return alert(error.message);
+  }
+
+  alert('Payment ' + decision + ' হয়েছে।');
+  $('loadActivationRequests').click();
+ }
 $('copyReferral').onclick = async () => {
   const code = $('referralDisplay').textContent;
   if (!code || code === '—') return;
