@@ -115,6 +115,52 @@ main{padding-bottom:85px}
   text-align:left;
   border-radius:9px;
 }
+ #bottomNav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  padding:10px 4px;
+  background:#102b20;
+  border-top:1px solid #286044;
+  z-index:999;
+}
+
+#bottomNav button{
+  flex:1;
+  background:transparent;
+  color:#b9d9c8;
+  border:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  padding:7px 2px;
+}
+
+#bottomNav button span{
+  font-size:22px;
+}
+
+#bottomNav button small{
+  font-size:11px;
+}
+
+#bottomNav .nav-home{
+  background:linear-gradient(135deg,#0bbd75,#53e6a0);
+  color:#07321e;
+  border-radius:15px;
+  margin-top:-22px;
+  padding:10px 5px;
+  box-shadow:0 4px 15px #0bbd7560;
+}
+
+#bottomNav .nav-home span{
+  font-size:29px;
+}
 </style>
 </head>
 <body>
