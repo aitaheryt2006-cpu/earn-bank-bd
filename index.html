@@ -364,13 +364,31 @@ Resend Confirmation Email
 </section>
 
 </main>
-
 <nav id="bottomNav" class="hidden">
- <button onclick="showNotice('Support')">Support</button>
- <button onclick="showNotice('Team')">Team</button>
- <button onclick="showNotice('Home')">Home</button>
- <button onclick="showNotice('Withdraw')">Withdraw</button>
- <button onclick="showNotice('Profile')">Profile</button>
+  <button onclick="showNotice('Support')">
+    <span>🎧</span>
+    <small>Support</small>
+  </button>
+
+  <button onclick="showNotice('Team')">
+    <span>👥</span>
+    <small>Team</small>
+  </button>
+
+  <button class="nav-home" onclick="showNotice('Home')">
+    <span>⌂</span>
+    <small>Home</small>
+  </button>
+
+  <button onclick="showNotice('Withdraw')">
+    <span>💳</span>
+    <small>Withdraw</small>
+  </button>
+
+  <button onclick="showNotice('Profile')">
+    <span>👤</span>
+    <small>Profile</small>
+  </button>
 </nav>
 
 <script>
