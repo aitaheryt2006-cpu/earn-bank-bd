@@ -249,6 +249,58 @@ main{padding-bottom:85px}
   text-align:right;
   overflow-wrap:anywhere;
 }
+ .activation-card{
+  background:linear-gradient(145deg,#102d20,#173e2d);
+  border:1px solid #c5a64b;
+  border-radius:20px;
+  padding:22px 18px;
+  color:#ffffff;
+  box-shadow:0 8px 24px #00000035;
+}
+
+.activation-card h3{
+  color:#ffdf83;
+  font-size:21px;
+  margin-bottom:18px;
+}
+
+.activation-card p{
+  color:#d5eadc;
+  line-height:1.7;
+}
+
+.activation-card input,
+.activation-card select{
+  width:100%;
+  box-sizing:border-box;
+  background:#0b281c;
+  color:#ffffff;
+  border:1px solid #47745b;
+  border-radius:13px;
+  padding:16px;
+  margin:8px 0;
+  font-size:14px;
+}
+
+.activation-card input::placeholder{
+  color:#a4b9aa;
+}
+
+.activation-card button{
+  width:100%;
+  background:linear-gradient(135deg,#0bbd75,#53e6a0);
+  color:#063421;
+  border:0;
+  border-radius:13px;
+  padding:16px;
+  font-weight:800;
+  font-size:15px;
+  margin-top:10px;
+}
+
+.activation-card button:disabled{
+  opacity:.6;
+}
 </style>
 </head>
 <body>
@@ -352,8 +404,7 @@ Resend Confirmation Email
     <span>✓ Verified Wallet</span>
   </div>
 </div>
-
-<div class="card account-card">
+<div class="card activation-card" id="activationCard">
   <div class="profile-row"><span>Full Name</span><b id="profileName">—</b></div>
   <div class="profile-row"><span>Username</span><b id="profileUsername">—</b></div>
   <div class="profile-row"><span>Email</span><b id="profileEmail">—</b></div>
