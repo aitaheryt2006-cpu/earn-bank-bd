@@ -211,6 +211,44 @@ main{padding-bottom:85px}
   font-size:10px;
   font-weight:bold;
  }
+ .account-card{
+  background:linear-gradient(145deg,#102d20,#194b35);
+  border:1px solid #c5a64b;
+  border-radius:18px;
+  padding:18px;
+  color:#ffffff;
+  box-shadow:0 6px 20px #00000030;
+}
+
+.account-card h3{
+  color:#ffdf83;
+  margin-bottom:18px;
+}
+
+.account-card .profile-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:12px 0;
+  border-bottom:1px solid #ffffff20;
+}
+
+.account-card .profile-row:last-child{
+  border-bottom:none;
+}
+
+.account-card .profile-row span{
+  color:#b9d9c8;
+  font-size:12px;
+}
+
+.account-card .profile-row b{
+  color:#ffffff;
+  font-size:12px;
+  text-align:right;
+  overflow-wrap:anywhere;
+}
 </style>
 </head>
 <body>
@@ -315,8 +353,7 @@ Resend Confirmation Email
   </div>
 </div>
 
- <div class="card">
-  <h3>Account Information</h3>
+<div class="card account-card">
   <div class="profile-row"><span>Full Name</span><b id="profileName">—</b></div>
   <div class="profile-row"><span>Username</span><b id="profileUsername">—</b></div>
   <div class="profile-row"><span>Email</span><b id="profileEmail">—</b></div>
