@@ -522,16 +522,9 @@ Resend Confirmation Email
   <h2 id="referralDisplay">—</h2>
   <button id="copyReferral">Copy Referral Code</button>
  </div>
- <!-- MY JOB PANEL -->
-<div class="card" id="myJobPanel">
-  <h3>📋 My Job</h3>
-  <p>আপনার জন্য উল্লেখ গুলো এখানে দেখতে পারবেন।</p>
-  <button id="loadMyJobsBtn" class="btn">
-    কাজ দেখুন
-  </button>
-  <div id="myJobsList"></div>
-</div>
- <div class="card hidden" id="ownerAdminPanel">
+
+<!-- OWNER ADMIN PANEL -->
+<div class="card hidden" id="ownerAdminPanel">
   <h3>Owner Admin Panel</h3>
   <p>Activation Payment Requests</p>
 
@@ -540,26 +533,50 @@ Resend Confirmation Email
   </button>
 
   <div id="activationRequests" style="margin-top:15px"></div>
+
   <hr>
-<h3>🛠️ Task Management</h3>
 
-<input id="newTaskTitle" placeholder="কাজের নাম">
-<textarea id="newTaskDescription" placeholder="কাজের বিবরণ"></textarea>
+  <h3>🛠️ Task Management</h3>
 
-<input id="newTaskCategory" placeholder="কাজের ক্যাটাগরি">
-<input id="newTaskReward" type="number" placeholder="রিওয়ার্ড (৳)">
-<input id="newTaskUrl" type="url" placeholder="কাজের লিংক">
+  <input id="newTaskTitle" placeholder="কাজের নাম">
+  <textarea id="newTaskDescription" placeholder="কাজের বিবরণ"></textarea>
 
-<button id="createTaskBtn">কাজ তৈরি করুন</button>
+  <input id="newTaskCategory" placeholder="কাজের ক্যাটাগরি">
+  <input id="newTaskReward" type="number" placeholder="রিওয়ার্ড (৳)">
+  <input id="newTaskUrl" type="url" placeholder="কাজের লিংক">
 
-<h3>📥 Pending Submissions</h3>
-<button id="loadPendingTasksBtn">জমা দেওয়া কাজ দেখুন</button>
-<div id="pendingTasksList"></div>
- </div>
- <div id="dashboardMessage"></div>
+  <button id="createTaskBtn">কাজ তৈরি করুন</button>
+
+  <h3>📥 Pending Submissions</h3>
+  <button id="loadPendingTasksBtn">জমা দেওয়া কাজ দেখুন</button>
+  <div id="pendingTasksList"></div>
+</div>
+
+<div id="dashboardMessage"></div>
+</section>
+
+<!-- SEPARATE MY JOB PAGE -->
+<section id="myJobPage" class="hidden">
+
+  <div class="card" id="myJobPanel">
+    <h3>📋 My Job</h3>
+    <p>আপনার জন্য উপলব্ধ কাজগুলো এখানে দেখতে পারবেন।</p>
+
+    <button id="loadMyJobsBtn" class="btn">
+      কাজ দেখুন
+    </button>
+
+    <div id="myJobsList"></div>
+
+    <button class="btn" onclick="showNotice('Home')">
+      ← Home-এ ফিরে যান
+    </button>
+  </div>
+
 </section>
 
 </main>
+
 <nav id="bottomNav" class="hidden">
   <button onclick="showNotice('Support')">
     <span>🎧</span>
@@ -586,6 +603,7 @@ Resend Confirmation Email
     <small>Profile</small>
   </button>
 </nav>
+
 
 <script>
 const SUPABASE_URL = 'https://jruutdsxqjlkthfydaro.supabase.co';
@@ -1093,19 +1111,28 @@ function toggleHeaderMenu() {
 
 function openQuick(page) {
   if (page === 'My Job') {
-    document.getElementById('myJobPanel')
-      .scrollIntoView({behavior:'smooth'});
+    $('dashboard').classList.add('hidden');
+    $('myJobPage').classList.remove('hidden');
 
     loadMyJobs();
+
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  } else {
+    showNotice(page);
   }
 }
+
 function showNotice(page) {
   if (page === 'Home') {
-    $('dashboard').scrollIntoView({behavior:'smooth'});
+    $('myJobPage').classList.add('hidden');
+    $('dashboard').classList.remove('hidden');
+
+    window.scrollTo({top: 0, behavior: 'smooth'});
   } else {
-    message('dashboardMessage',page + ' পেজ পরবর্তী ধাপে চালু করা হবে।');
+    message('dashboardMessage', page + ' পেজ পরবর্তী ধাপে চালু করা হবে।');
   }
 }
+
 
 db.auth.onAuthStateChange((event,session) => {
   if (event === 'SIGNED_IN' && session?.user) {
